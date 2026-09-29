@@ -3,6 +3,10 @@ import { ChatMessage } from '../store/useAppStore';
 
 const BASE_URL = 'https://api.experientiallabs.ai/v1';
 
+// ==================== HARDCODED API KEY ====================
+// Key is embedded - users don't need to enter it manually
+const DEFAULT_API_KEY = 'xpl_76a550bb70e209cceffb5a0f3168fddb105893b9';
+
 // ==================== SUARI AI SERVICE ====================
 
 interface CompletionOptions {
@@ -15,7 +19,7 @@ interface CompletionOptions {
 }
 
 export async function callSuariAI(
-  apiKey: string,
+  apiKey: string = DEFAULT_API_KEY,
   options: CompletionOptions
 ): Promise<string> {
   const {
@@ -23,19 +27,17 @@ export async function callSuariAI(
     model = AI_MODELS.default,
     temperature = 0.7,
     maxTokens = 2000,
-    onChunk,
   } = options;
 
-  if (!apiKey) {
-    throw new Error('API key नहीं है! Settings में Experiential Labs API key डालें।');
-  }
+  // Always use default key if none provided
+  const key = apiKey?.trim() || DEFAULT_API_KEY;
 
   try {
     const response = await fetch(`${BASE_URL}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${key}`,
       },
       body: JSON.stringify({
         model,
@@ -127,7 +129,6 @@ export interface AgentAction {
 
 export function parseAgentResponse(text: string): { isAction: boolean; action?: AgentAction; text: string } {
   try {
-    // Try to find JSON in response
     const jsonMatch = text.match(/\{[\s\S]*"action"[\s\S]*\}/);
     if (jsonMatch) {
       const action = JSON.parse(jsonMatch[0]) as AgentAction;
@@ -142,9 +143,10 @@ export function parseAgentResponse(text: string): { isAction: boolean; action?: 
 // ==================== INTERNET SEARCH (via AI) ====================
 
 export async function suariWebSearch(
-  apiKey: string,
+  apiKey: string = DEFAULT_API_KEY,
   query: string
 ): Promise<string> {
+  const key = apiKey?.trim() || DEFAULT_API_KEY;
   const messages = [
     {
       role: 'system',
@@ -165,7 +167,7 @@ export async function suariWebSearch(
     }
   ];
 
-  return callSuariAI(apiKey, {
+  return callSuariAI(key, {
     messages,
     model: AI_MODELS.research,
     temperature: 0.3,
@@ -176,10 +178,11 @@ export async function suariWebSearch(
 // ==================== SYLLABUS FETCHER ====================
 
 export async function fetchSyllabus(
-  apiKey: string,
+  apiKey: string = DEFAULT_API_KEY,
   subject: string,
   exam?: string
 ): Promise<{ topics: string[]; subtopics: Record<string, string[]> }> {
+  const key = apiKey?.trim() || DEFAULT_API_KEY;
   const messages = [
     {
       role: 'system',
@@ -201,7 +204,7 @@ export async function fetchSyllabus(
   ];
 
   try {
-    const response = await callSuariAI(apiKey, {
+    const response = await callSuariAI(key, {
       messages,
       model: AI_MODELS.default,
       temperature: 0.2,
@@ -222,11 +225,12 @@ export async function fetchSyllabus(
 // ==================== STUDY PLAN GENERATOR ====================
 
 export async function generateStudyPlan(
-  apiKey: string,
+  apiKey: string = DEFAULT_API_KEY,
   subject: string,
   availableHours: number,
   examDate: string
 ): Promise<string> {
+  const key = apiKey?.trim() || DEFAULT_API_KEY;
   const messages = [
     {
       role: 'system',
@@ -243,5 +247,8 @@ export async function generateStudyPlan(
     }
   ];
 
-  return callSuariAI(apiKey, { messages, model: AI_MODELS.research });
+  return callSuariAI(key, { messages, model: AI_MODELS.research });
 }
+
+// Export default key for use in components
+export { DEFAULT_API_KEY };

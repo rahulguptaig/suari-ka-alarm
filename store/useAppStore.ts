@@ -289,7 +289,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   // === Settings ===
   userName: '',
-  apiKey: process.env.EXPO_PUBLIC_EXPLABS_API_KEY || '',
+  apiKey: 'xpl_76a550bb70e209cceffb5a0f3168fddb105893b9',
   theme: 'dark',
   setUserName: (name) => {
     set({ userName: name });
@@ -315,7 +315,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           activeThreadId: data.activeThreadId || null,
           suariMemory: data.suariMemory || { preferences: {}, facts: [] },
           userName: data.userName || '',
-          apiKey: data.apiKey || process.env.EXPO_PUBLIC_EXPLABS_API_KEY || '',
+          apiKey: data.apiKey || 'xpl_76a550bb70e209cceffb5a0f3168fddb105893b9',
           theme: data.theme || 'dark',
         });
       }
