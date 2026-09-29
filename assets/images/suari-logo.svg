@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1A0A3A"/>
+      <stop offset="100%" stop-color="#080818"/>
+    </radialGradient>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B9D"/>
+      <stop offset="100%" stop-color="#7C5CFC"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7C5CFC"/>
+      <stop offset="100%" stop-color="#00D4FF"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="20" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="url(#bgGrad)" rx="220"/>
+  
+  <!-- Stars -->
+  <circle cx="100" cy="150" r="3" fill="#7C5CFC" opacity="0.7"/>
+  <circle cx="900" cy="100" r="2" fill="#00D4FF" opacity="0.6"/>
+  <circle cx="150" cy="800" r="4" fill="#FF6B9D" opacity="0.5"/>
+  <circle cx="850" cy="750" r="3" fill="#7C5CFC" opacity="0.7"/>
+  <circle cx="200" cy="400" r="2" fill="#00D4FF" opacity="0.4"/>
+  <circle cx="780" cy="300" r="2.5" fill="#FF6B9D" opacity="0.5"/>
+  <circle cx="50" cy="550" r="2" fill="#7C5CFC" opacity="0.6"/>
+  <circle cx="950" cy="500" r="3" fill="#00D4FF" opacity="0.5"/>
+  <circle cx="400" cy="50" r="2" fill="#FF6B9D" opacity="0.4"/>
+  <circle cx="700" cy="970" r="2" fill="#7C5CFC" opacity="0.5"/>
+
+  <!-- Outer glow ring -->
+  <circle cx="512" cy="430" r="270" fill="none" stroke="#7C5CFC" stroke-width="2" opacity="0.2" filter="url(#softGlow)"/>
+
+  <!-- Face base (monkey head shape) - big rounded head -->
+  <ellipse cx="512" cy="430" rx="240" ry="230" fill="url(#bodyGrad)" filter="url(#glow)"/>
+  
+  <!-- Inner face lighter -->
+  <ellipse cx="512" cy="445" rx="195" ry="185" fill="#FFB8D0" opacity="0.85"/>
+
+  <!-- Monkey ears -->
+  <circle cx="272" cy="360" r="65" fill="url(#bodyGrad)"/>
+  <circle cx="272" cy="360" r="45" fill="#FFB8D0" opacity="0.8"/>
+  <circle cx="752" cy="360" r="65" fill="url(#bodyGrad)"/>
+  <circle cx="752" cy="360" r="45" fill="#FFB8D0" opacity="0.8"/>
+
+  <!-- 🐷 Pig snout -->
+  <ellipse cx="512" cy="510" rx="80" ry="60" fill="#FF8FA3"/>
+  <circle cx="487" cy="510" r="22" fill="#D4607A"/>
+  <circle cx="537" cy="510" r="22" fill="#D4607A"/>
+  <!-- Nostril shine -->
+  <circle cx="480" cy="504" r="6" fill="#FF6B9D" opacity="0.5"/>
+  <circle cx="530" cy="504" r="6" fill="#FF6B9D" opacity="0.5"/>
+
+  <!-- 🙈 Monkey hands covering eyes -->
+  <!-- Left hand -->
+  <ellipse cx="390" cy="380" rx="90" ry="70" fill="#7C5CFC" transform="rotate(-15 390 380)"/>
+  <ellipse cx="390" cy="380" rx="75" ry="55" fill="#9B7FFF" transform="rotate(-15 390 380)"/>
+  <!-- Left hand fingers -->
+  <ellipse cx="320" cy="345" rx="22" ry="35" fill="#7C5CFC" transform="rotate(-20 320 345)"/>
+  <ellipse cx="295" cy="365" rx="20" ry="33" fill="#7C5CFC" transform="rotate(-30 295 365)"/>
+  <ellipse cx="340" cy="320" rx="22" ry="35" fill="#7C5CFC" transform="rotate(-10 340 320)"/>
+  
+  <!-- Right hand -->
+  <ellipse cx="634" cy="380" rx="90" ry="70" fill="#7C5CFC" transform="rotate(15 634 380)"/>
+  <ellipse cx="634" cy="380" rx="75" ry="55" fill="#9B7FFF" transform="rotate(15 634 380)"/>
+  <!-- Right hand fingers -->
+  <ellipse cx="704" cy="345" rx="22" ry="35" fill="#7C5CFC" transform="rotate(20 704 345)"/>
+  <ellipse cx="729" cy="365" rx="20" ry="33" fill="#7C5CFC" transform="rotate(30 729 365)"/>
+  <ellipse cx="684" cy="320" rx="22" ry="35" fill="#7C5CFC" transform="rotate(10 684 320)"/>
+
+  <!-- Glowing eyes peeking through fingers -->
+  <!-- Left eye glow -->
+  <circle cx="400" cy="375" r="35" fill="#7C5CFC" filter="url(#glow)" opacity="0.9"/>
+  <circle cx="400" cy="375" r="25" fill="#00D4FF"/>
+  <circle cx="400" cy="375" r="15" fill="white"/>
+  <circle cx="405" cy="370" r="7" fill="#080818"/>
+  <circle cx="408" cy="367" r="3" fill="white"/>
+  
+  <!-- Right eye glow -->
+  <circle cx="624" cy="375" r="35" fill="#7C5CFC" filter="url(#glow)" opacity="0.9"/>
+  <circle cx="624" cy="375" r="25" fill="#00D4FF"/>
+  <circle cx="624" cy="375" r="15" fill="white"/>
+  <circle cx="629" cy="370" r="7" fill="#080818"/>
+  <circle cx="632" cy="367" r="3" fill="white"/>
+
+  <!-- Smile / mouth -->
+  <path d="M460 548 Q512 590 564 548" stroke="#D4607A" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+  <!-- Alarm bell hat on top -->
+  <ellipse cx="512" cy="215" rx="90" ry="20" fill="#FFD740" opacity="0.9"/>
+  <ellipse cx="512" cy="195" rx="80" ry="60" fill="#FFD740"/>
+  <rect x="497" y="135" width="30" height="20" rx="5" fill="#FFB300"/>
+  <circle cx="512" cy="133" r="10" fill="#FF8F00"/>
+  <!-- Bell clapper -->
+  <circle cx="512" cy="265" r="15" fill="#FFB300"/>
+  <!-- Bell glow -->
+  <ellipse cx="512" cy="200" rx="80" ry="60" fill="none" stroke="#FFD740" stroke-width="3" opacity="0.5" filter="url(#glow)"/>
+
+  <!-- AI circuit lines on forehead -->
+  <line x1="460" y1="270" x2="512" y2="260" stroke="#7C5CFC" stroke-width="2" opacity="0.6"/>
+  <line x1="564" y1="270" x2="512" y2="260" stroke="#7C5CFC" stroke-width="2" opacity="0.6"/>
+  <circle cx="512" cy="260" r="5" fill="#7C5CFC" opacity="0.8"/>
+  <circle cx="455" cy="272" r="4" fill="#00D4FF" opacity="0.7"/>
+  <circle cx="569" cy="272" r="4" fill="#00D4FF" opacity="0.7"/>
+
+  <!-- Cheek blushes -->
+  <ellipse cx="335" cy="480" rx="45" ry="30" fill="#FF6B9D" opacity="0.35"/>
+  <ellipse cx="689" cy="480" rx="45" ry="30" fill="#FF6B9D" opacity="0.35"/>
+
+  <!-- Bottom text: "Suari" -->
+  <text x="512" y="730" text-anchor="middle" font-family="'Arial Rounded MT Bold', 'Helvetica Neue', Arial, sans-serif" font-size="110" font-weight="900" fill="url(#bodyGrad)" filter="url(#glow)">Suari</text>
+  
+  <!-- Subtitle -->
+  <text x="512" y="790" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="500" fill="#9B7FFF" opacity="0.9">Ka Alarm</text>
+  
+  <!-- Bottom decorative line -->
+  <line x1="320" y1="815" x2="704" y2="815" stroke="url(#glowGrad)" stroke-width="2" opacity="0.5"/>
+  
+  <!-- Small stars near text -->
+  <circle cx="320" cy="730" r="5" fill="#FFD740" filter="url(#glow)"/>
+  <circle cx="704" cy="730" r="5" fill="#FFD740" filter="url(#glow)"/>
+  <circle cx="200" cy="640" r="3" fill="#7C5CFC" opacity="0.6"/>
+  <circle cx="824" cy="640" r="3" fill="#FF6B9D" opacity="0.6"/>
+</svg>
