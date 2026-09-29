@@ -91,61 +91,22 @@ export default function SettingsScreen() {
         ))}
       </View>
 
-      {/* API Key Section */}
+      {/* Suari AI Status */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>🤖 Suari AI Config</Text>
+        <Text style={styles.sectionTitle}>🤖 Suari AI Status</Text>
         <LinearGradient colors={['rgba(255,107,157,0.1)', 'rgba(124,92,252,0.08)']} style={styles.apiCard}>
           <View style={styles.apiHeader}>
             <MaterialCommunityIcons name="robot-outline" size={20} color={COLORS.accent} />
-            <Text style={styles.apiTitle}>Experiential Labs API Key</Text>
+            <Text style={styles.apiTitle}>Suari AI</Text>
+            <View style={styles.activeBadge}>
+              <Text style={styles.activeBadgeText}>● Active</Text>
+            </View>
           </View>
           <Text style={styles.apiDesc}>
-            Suari AI ke liye API key chahiye. Platform.experientiallabs.ai par free account banao.
+            Suari AI powered by Experiential Labs. Chat, Agent aur Research modes available hain. 🌟
           </Text>
-
-          {editingKey ? (
-            <View style={styles.keyEditContainer}>
-              <View style={styles.keyInputRow}>
-                <TextInput
-                  style={styles.keyInput}
-                  value={tempKey}
-                  onChangeText={setTempKey}
-                  secureTextEntry={!showKey}
-                  placeholder="xpl_xxxxxxxxxxxxxxxxxxxxx"
-                  placeholderTextColor={COLORS.textMuted}
-                  autoFocus
-                />
-                <TouchableOpacity onPress={() => setShowKey(!showKey)}>
-                  <Ionicons name={showKey ? 'eye-off' : 'eye'} size={20} color={COLORS.textMuted} />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.keyBtns}>
-                <TouchableOpacity style={styles.cancelKeyBtn} onPress={() => setEditingKey(false)}>
-                  <Text style={styles.cancelKeyText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.saveKeyBtn} onPress={handleSaveKey}>
-                  <LinearGradient colors={['#FF6B9D', '#7C5CFC']} style={styles.saveKeyGrad}>
-                    <Text style={styles.saveKeyText}>Save Key</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              </View>
-            </View>
-          ) : (
-            <TouchableOpacity
-              style={styles.keyDisplay}
-              onPress={() => { setEditingKey(true); setTempKey(apiKey); }}
-            >
-              <Text style={styles.keyText}>
-                {apiKey
-                  ? `${apiKey.slice(0, 6)}${'•'.repeat(20)}${apiKey.slice(-4)}`
-                  : '⚠️ API key nahi hai - tap karke add karo'}
-              </Text>
-              <Ionicons name="pencil" size={16} color={COLORS.textMuted} />
-            </TouchableOpacity>
-          )}
-
           <View style={styles.modelInfo}>
-            <Text style={styles.modelInfoLabel}>Active Model:</Text>
+            <Text style={styles.modelInfoLabel}>Models:</Text>
             <View style={styles.modelBadge}>
               <Text style={styles.modelBadgeText}>gpt-5.6-luna</Text>
             </View>
@@ -155,6 +116,7 @@ export default function SettingsScreen() {
           </View>
         </LinearGradient>
       </View>
+
 
       {/* About Section */}
       <View style={styles.section}>
@@ -496,6 +458,21 @@ const styles = StyleSheet.create({
   footerText: {
     color: '#fff',
     fontSize: 14,
-    fontFamily: 'SpaceGrotesk-SemiBold',
+  },
+
+  // Active badge
+  activeBadge: {
+    backgroundColor: 'rgba(0,230,118,0.15)',
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderWidth: 1,
+    borderColor: 'rgba(0,230,118,0.3)',
+    marginLeft: 8,
+  },
+  activeBadgeText: {
+    color: '#00E676',
+    fontSize: 12,
+    fontWeight: '600',
   },
 });
