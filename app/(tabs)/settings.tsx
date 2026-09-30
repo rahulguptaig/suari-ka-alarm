@@ -186,7 +186,7 @@ export default function SettingsScreen() {
           <View style={styles.modelInfo}>
             <Text style={styles.modelInfoLabel}>Models:</Text>
             <View style={styles.modelBadge}>
-              <Text style={styles.modelBadgeText}>luna</Text>
+              <Text style={styles.modelBadgeText}>gpt-5.6-luna</Text>
             </View>
             <View style={styles.modelBadge}>
               <Text style={styles.modelBadgeText}>claude-3.5</Text>
