@@ -13,14 +13,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAppStore } from '../../store/useAppStore';
 import { COLORS, BORDER_RADIUS, SPACING } from '../../constants/theme';
+import { t, languages, LanguageCode } from '../../locales';
 
 export default function SettingsScreen() {
-  const { userName, apiKey, setUserName, setApiKey, alarms, todos, subjects, threads } = useAppStore();
+  const { userName, apiKey, setUserName, setApiKey, alarms, todos, subjects, threads, language, setLanguage } = useAppStore();
   const [editingName, setEditingName] = useState(false);
   const [tempName, setTempName] = useState(userName);
   const [editingKey, setEditingKey] = useState(false);
   const [tempKey, setTempKey] = useState(apiKey);
   const [showKey, setShowKey] = useState(false);
+  const [showLangMenu, setShowLangMenu] = useState(false);
 
   const handleSaveName = () => {
     setUserName(tempName.trim());
@@ -44,7 +46,7 @@ export default function SettingsScreen() {
     <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>⚙️ Settings</Text>
+        <Text style={styles.headerTitle}>⚙️ {t(language, 'settings_title')}</Text>
       </View>
 
       {/* Profile Card */}
@@ -89,6 +91,40 @@ export default function SettingsScreen() {
             <Text style={styles.statLabel}>{s.label}</Text>
           </LinearGradient>
         ))}
+      </View>
+
+      {/* Language Selector */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>🌐 {t(language, 'language')}</Text>
+        <LinearGradient colors={['rgba(18,18,42,0.9)', 'rgba(13,13,34,0.8)']} style={styles.aboutCard}>
+          <TouchableOpacity 
+            style={styles.langSelector}
+            onPress={() => setShowLangMenu(!showLangMenu)}
+          >
+            <Text style={styles.aboutValue}>{languages[language]}</Text>
+            <Ionicons name={showLangMenu ? "chevron-up" : "chevron-down"} size={20} color={COLORS.textSecondary} />
+          </TouchableOpacity>
+          
+          {showLangMenu && (
+            <View style={styles.langMenu}>
+              {(Object.keys(languages) as LanguageCode[]).map((lang) => (
+                <TouchableOpacity 
+                  key={lang}
+                  style={[styles.langOption, language === lang && styles.langOptionActive]}
+                  onPress={() => {
+                    setLanguage(lang);
+                    setShowLangMenu(false);
+                  }}
+                >
+                  <Text style={[styles.langOptionText, language === lang && {color: COLORS.primary}]}>
+                    {languages[lang]}
+                  </Text>
+                  {language === lang && <Ionicons name="checkmark" size={18} color={COLORS.primary} />}
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+        </LinearGradient>
       </View>
 
       {/* Suari AI Status */}
@@ -474,5 +510,34 @@ const styles = StyleSheet.create({
     color: '#00E676',
     fontSize: 12,
     fontWeight: '600',
+  },
+  // Language
+  langSelector: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: SPACING.sm,
+  },
+  langMenu: {
+    marginTop: SPACING.sm,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,255,255,0.05)',
+    paddingTop: SPACING.sm,
+  },
+  langOption: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+  },
+  langOptionActive: {
+    backgroundColor: 'rgba(124,92,252,0.1)',
+  },
+  langOptionText: {
+    color: COLORS.textSecondary,
+    fontSize: 14,
+    fontFamily: 'SpaceGrotesk-Medium',
   },
 });

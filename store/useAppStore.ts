@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '../lib/supabase';
+import { LanguageCode } from '../locales';
 
 // ==================== TYPES ====================
 
@@ -114,8 +115,10 @@ interface AppState {
   userName: string;
   apiKey: string;
   theme: 'dark' | 'light';
+  language: LanguageCode;
   setUserName: (name: string) => void;
   setApiKey: (key: string) => void;
+  setLanguage: (lang: LanguageCode) => void;
 
   // Hydration
   hydrated: boolean;
@@ -354,12 +357,17 @@ export const useAppStore = create<AppState>((set, get) => ({
   userName: '',
   apiKey: 'xpl_76a550bb70e209cceffb5a0f3168fddb105893b9',
   theme: 'dark',
+  language: 'en',
   setUserName: (name) => {
     set({ userName: name });
     get().persist();
   },
   setApiKey: (key) => {
     set({ apiKey: key });
+    get().persist();
+  },
+  setLanguage: (lang) => {
+    set({ language: lang });
     get().persist();
   },
 
@@ -382,6 +390,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           userName: localData.userName || '',
           apiKey: localData.apiKey || 'xpl_76a550bb70e209cceffb5a0f3168fddb105893b9',
           theme: localData.theme || 'dark',
+          language: localData.language || 'en',
         });
       }
 
@@ -449,6 +458,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         userName: s.userName,
         apiKey: s.apiKey,
         theme: s.theme,
+        language: s.language,
       };
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (e) {
