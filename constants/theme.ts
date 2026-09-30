@@ -108,11 +108,11 @@ export const SHADOW = {
   },
 };
 
-// AI Models available on Experiential Labs
+// AI Models available on Experiential Labs (Gateway supports standard models)
 export const AI_MODELS = {
-  default: 'gpt-5.6-luna',
-  research: 'qwen3.8-27b',
-  fast: 'gemini-3.7-flash',
+  default: 'gpt-4o',
+  research: 'claude-3-5-sonnet-latest',
+  fast: 'gemini-1.5-flash',
 };
 
 // API Config

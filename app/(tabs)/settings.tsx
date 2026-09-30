@@ -144,10 +144,10 @@ export default function SettingsScreen() {
           <View style={styles.modelInfo}>
             <Text style={styles.modelInfoLabel}>Models:</Text>
             <View style={styles.modelBadge}>
-              <Text style={styles.modelBadgeText}>gpt-5.6-luna</Text>
+              <Text style={styles.modelBadgeText}>gpt-4o</Text>
             </View>
             <View style={styles.modelBadge}>
-              <Text style={styles.modelBadgeText}>qwen3.8-27b</Text>
+              <Text style={styles.modelBadgeText}>claude-3.5</Text>
             </View>
           </View>
         </LinearGradient>
