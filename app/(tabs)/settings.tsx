@@ -12,7 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAppStore } from '../../store/useAppStore';
-import { COLORS, BORDER_RADIUS, SPACING } from '../../constants/theme';
+import { COLORS, BORDER_RADIUS, SPACING, GRADIENTS } from '../../constants/theme';
 import { t, languages, LanguageCode } from '../../locales';
 
 export default function SettingsScreen() {
@@ -141,6 +141,48 @@ export default function SettingsScreen() {
           <Text style={styles.apiDesc}>
             Suari AI powered by Experiential Labs. Chat, Agent aur Research modes available hain. 🌟
           </Text>
+          
+          <View style={styles.keyDisplay}>
+            {showKey ? (
+              <View style={styles.keyEditContainer}>
+                <View style={styles.keyInputRow}>
+                  <Ionicons name="key-outline" size={16} color={COLORS.primary} />
+                  <TextInput
+                    style={styles.keyInput}
+                    value={tempKey}
+                    onChangeText={setTempKey}
+                    placeholder="xpl_..."
+                    placeholderTextColor={COLORS.textMuted}
+                    autoCapitalize="none"
+                    secureTextEntry={!editingKey}
+                  />
+                  <TouchableOpacity onPress={() => setEditingKey(!editingKey)}>
+                    <Ionicons name={editingKey ? "eye-off-outline" : "eye-outline"} size={16} color={COLORS.textMuted} />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.keyBtns}>
+                  <TouchableOpacity style={styles.cancelKeyBtn} onPress={() => { setShowKey(false); setTempKey(apiKey); }}>
+                    <Text style={styles.cancelKeyText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.saveKeyBtn} onPress={() => { setApiKey(tempKey.trim()); setShowKey(false); }}>
+                    <LinearGradient colors={GRADIENTS.primary} style={styles.saveKeyGrad}>
+                      <Text style={styles.saveKeyText}>Save Key</Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ) : (
+              <>
+                <Text style={styles.keyText} numberOfLines={1}>
+                  🔑 {apiKey ? `${apiKey.substring(0, 8)}...${apiKey.slice(-4)}` : 'API Key set nahi hai'}
+                </Text>
+                <TouchableOpacity onPress={() => setShowKey(true)}>
+                  <Text style={[styles.profileEdit, { color: COLORS.primary }]}>Change</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+
           <View style={styles.modelInfo}>
             <Text style={styles.modelInfoLabel}>Models:</Text>
             <View style={styles.modelBadge}>
