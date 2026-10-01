@@ -26,6 +26,7 @@ import {
   AgentAction,
 } from '../../services/suariAI';
 import { COLORS, BORDER_RADIUS, SPACING } from '../../constants/theme';
+import { scheduleAlarm } from '../../services/alarmService';
 
 type ChatMode = 'chat' | 'agent' | 'research';
 
@@ -255,6 +256,9 @@ export default function SuariScreen() {
     updateThread,
     deleteThread,
     updateSuariMemory,
+    addAlarm,
+    addTodo,
+    addSubject,
   } = useAppStore();
 
   const [mode, setMode] = useState<ChatMode>('chat');
@@ -380,17 +384,53 @@ export default function SuariScreen() {
     }
   }, [input, isLoading, activeThreadId, activeThread, mode, apiKey, addMessage, updateMessage]);
 
-  const handleAgentAction = (action: AgentAction) => {
+  const handleAgentAction = async (action: AgentAction) => {
     switch (action.action) {
-      case 'set_alarm':
-        router.push('/alarm/new');
+      case 'set_alarm': {
+        const timeParts = action.params?.time?.split(/[: ]/) || ['06', '00', 'AM'];
+        const isPM = action.params?.time?.toLowerCase().includes('pm');
+        let hours = parseInt(timeParts[0]) || 6;
+        const minutes = parseInt(timeParts[1]) || 0;
+        if (isPM && hours < 12) hours += 12;
+        if (!isPM && hours === 12) hours = 0;
+        
+        const newAlarm = {
+          id: Date.now().toString(),
+          time: { hours, minutes },
+          label: action.params?.label || 'AI Alarm',
+          isEnabled: true,
+          days: [false, false, false, false, false, false, false],
+          sound: 'radar',
+          vibrate: true,
+          snoozeEnabled: true,
+          snoozeDuration: 5,
+          createdAt: new Date().toISOString()
+        };
+        addAlarm(newAlarm);
+        await scheduleAlarm(newAlarm);
         break;
-      case 'add_todo':
-        router.push('/todo');
+      }
+      case 'add_todo': {
+        addTodo({
+          id: Date.now().toString(),
+          title: action.params?.title || 'New AI Task',
+          priority: action.params?.priority || 'medium',
+          dueDate: action.params?.dueDate || '',
+          isCompleted: false,
+          createdAt: new Date().toISOString()
+        });
         break;
-      case 'create_syllabus':
-        router.push('/syllabus/add');
+      }
+      case 'create_syllabus': {
+        addSubject({
+          id: Date.now().toString(),
+          name: action.params?.subject || 'New Subject',
+          topics: [],
+          examDate: '',
+          color: COLORS.primary,
+        });
         break;
+      }
     }
   };
 

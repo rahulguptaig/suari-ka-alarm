@@ -130,76 +130,7 @@ export default function SettingsScreen() {
         </LinearGradient>
       </View>
 
-      {/* Suari AI Status */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Suari AI Status</Text>
-        <LinearGradient colors={['rgba(255,107,157,0.1)', 'rgba(124,92,252,0.08)']} style={styles.apiCard}>
-          <View style={styles.apiHeader}>
-            <MaterialCommunityIcons name="robot-outline" size={20} color={COLORS.accent} />
-            <Text style={styles.apiTitle}>Suari AI</Text>
-            <View style={styles.activeBadge}>
-              <Text style={styles.activeBadgeText}>Active</Text>
-            </View>
-          </View>
-          <Text style={styles.apiDesc}>
-            Suari AI powered by Experiential Labs. Chat, Agent, and Research modes available.
-          </Text>
-          
-          <View style={styles.keyDisplay}>
-            {showKey ? (
-              <View style={styles.keyEditContainer}>
-                <View style={styles.keyInputRow}>
-                  <Ionicons name="key-outline" size={16} color={COLORS.primary} />
-                  <TextInput
-                    style={styles.keyInput}
-                    value={tempKey}
-                    onChangeText={setTempKey}
-                    placeholder="xpl_..."
-                    placeholderTextColor={COLORS.textMuted}
-                    autoCapitalize="none"
-                    secureTextEntry={!editingKey}
-                  />
-                  <TouchableOpacity onPress={() => setEditingKey(!editingKey)}>
-                    <Ionicons name={editingKey ? "eye-off-outline" : "eye-outline"} size={16} color={COLORS.textMuted} />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.keyBtns}>
-                  <TouchableOpacity style={styles.cancelKeyBtn} onPress={() => { setShowKey(false); setTempKey(apiKey); }}>
-                    <Text style={styles.cancelKeyText}>Cancel</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.saveKeyBtn} onPress={() => { setApiKey(tempKey.trim()); setShowKey(false); }}>
-                    <LinearGradient colors={GRADIENTS.primary} style={styles.saveKeyGrad}>
-                      <Text style={styles.saveKeyText}>Save Key</Text>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ) : (
-              <>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flex: 1 }}>
-                  <Ionicons name="key" size={14} color={COLORS.textPrimary} />
-                  <Text style={styles.keyText} numberOfLines={1}>
-                    {apiKey ? `${apiKey.substring(0, 8)}...${apiKey.slice(-4)}` : 'API Key is not set'}
-                  </Text>
-                </View>
-                <TouchableOpacity onPress={() => setShowKey(true)}>
-                  <Text style={[styles.profileEdit, { color: COLORS.primary }]}>Change</Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
 
-          <View style={styles.modelInfo}>
-            <Text style={styles.modelInfoLabel}>Models:</Text>
-            <View style={styles.modelBadge}>
-              <Text style={styles.modelBadgeText}>gpt-5.6-luna</Text>
-            </View>
-            <View style={styles.modelBadge}>
-              <Text style={styles.modelBadgeText}>claude-3.5</Text>
-            </View>
-          </View>
-        </LinearGradient>
-      </View>
 
 
       {/* About Section */}

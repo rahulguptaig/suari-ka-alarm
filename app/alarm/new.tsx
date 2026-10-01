@@ -84,7 +84,7 @@ export default function NewAlarmScreen() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content} nestedScrollEnabled={true}>
         {/* Time Picker */}
         <LinearGradient
           colors={['rgba(124,92,252,0.15)', 'rgba(124,92,252,0.05)']}
@@ -98,6 +98,7 @@ export default function NewAlarmScreen() {
               showsVerticalScrollIndicator={false}
               snapToInterval={44}
               decelerationRate="fast"
+              nestedScrollEnabled={true}
             >
               {HOURS.map((h) => (
                 <TouchableOpacity
@@ -120,6 +121,7 @@ export default function NewAlarmScreen() {
               showsVerticalScrollIndicator={false}
               snapToInterval={44}
               decelerationRate="fast"
+              nestedScrollEnabled={true}
             >
               {MINUTES.map((m) => (
                 <TouchableOpacity
