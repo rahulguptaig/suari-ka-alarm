@@ -59,18 +59,35 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   const isUser = message.role === 'user';
   const isLoading = message.isLoading;
 
-  const dotAnim = useRef(new Animated.Value(0)).current;
+  const [loadingText, setLoadingText] = useState('Initializing...');
+  const pulseAnim = useRef(new Animated.Value(0.4)).current;
 
   useEffect(() => {
     if (isLoading) {
       Animated.loop(
         Animated.sequence([
-          Animated.timing(dotAnim, { toValue: 1, duration: 600, useNativeDriver: true }),
-          Animated.timing(dotAnim, { toValue: 0, duration: 600, useNativeDriver: true }),
+          Animated.timing(pulseAnim, { toValue: 1, duration: 800, useNativeDriver: true }),
+          Animated.timing(pulseAnim, { toValue: 0.4, duration: 800, useNativeDriver: true }),
         ])
       ).start();
+
+      const steps = message.mode === 'research' 
+        ? ['Analyzing query...', 'Searching knowledge base...', 'Compiling research...', 'Finalizing insights...']
+        : message.mode === 'agent'
+        ? ['Analyzing request...', 'Determining actions...', 'Processing tasks...', 'Finalizing...']
+        : ['Thinking...', 'Formulating response...'];
+
+      let stepIdx = 0;
+      setLoadingText(steps[stepIdx]);
+      
+      const interval = setInterval(() => {
+        stepIdx = Math.min(stepIdx + 1, steps.length - 1);
+        setLoadingText(steps[stepIdx]);
+      }, 2000);
+      
+      return () => clearInterval(interval);
     }
-  }, [isLoading]);
+  }, [isLoading, message.mode]);
 
   return (
     <View style={[styles.messageBubbleContainer, isUser ? styles.userBubbleContainer : styles.aiBubbleContainer]}>
@@ -84,28 +101,10 @@ function MessageBubble({ message }: { message: ChatMessage }) {
 
       <View style={[styles.messageBubble, isUser ? styles.userBubble : styles.aiBubble]}>
         {isLoading ? (
-          <View style={styles.loadingDots}>
-            {[0, 1, 2].map((i) => (
-              <Animated.View
-                key={i}
-                style={[
-                  styles.dot,
-                  {
-                    opacity: dotAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0.3, 1],
-                    }),
-                    transform: [{
-                      translateY: dotAnim.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0, -4],
-                      })
-                    }],
-                  },
-                ]}
-              />
-            ))}
-          </View>
+          <Animated.View style={[styles.premiumLoadingContainer, { opacity: pulseAnim }]}>
+            <Ionicons name="sparkles" size={14} color={COLORS.accent} style={{ marginRight: 6 }} />
+            <Text style={styles.premiumLoadingText}>{loadingText}</Text>
+          </Animated.View>
         ) : (
           <Text style={[styles.messageText, isUser ? styles.userMessageText : styles.aiMessageText]}>
             {message.content}
@@ -129,7 +128,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
 }
 
 // ==================== THREAD SIDEBAR ====================
-function ThreadSidebar({ visible, threads, activeId, onSelect, onNew, onClose, onDelete }: {
+function ThreadSidebar({ visible, threads, activeId, onSelect, onNew, onClose, onDelete, onRename }: {
   visible: boolean;
   threads: ChatThread[];
   activeId: string | null;
@@ -137,7 +136,11 @@ function ThreadSidebar({ visible, threads, activeId, onSelect, onNew, onClose, o
   onNew: () => void;
   onClose: () => void;
   onDelete: (id: string) => void;
+  onRename: (id: string, newTitle: string) => void;
 }) {
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [tempTitle, setTempTitle] = useState('');
+
   if (!visible) return null;
 
   return (
@@ -154,14 +157,18 @@ function ThreadSidebar({ visible, threads, activeId, onSelect, onNew, onClose, o
 
         <ScrollView style={styles.threadList}>
           {threads.length === 0 ? (
-            <Text style={styles.noThreads}>Koi conversation nahi hai abhi</Text>
+            <Text style={styles.noThreads}>No conversations yet.</Text>
           ) : (
             threads.map((thread) => (
               <TouchableOpacity
                 key={thread.id}
                 style={[styles.threadItem, thread.id === activeId && styles.threadItemActive]}
-                onPress={() => { onSelect(thread.id); onClose(); }}
-                onLongPress={() => onDelete(thread.id)}
+                onPress={() => {
+                  if (editingId !== thread.id) {
+                    onSelect(thread.id);
+                    onClose();
+                  }
+                }}
               >
                 <View style={[styles.threadModeIcon, { backgroundColor: MODE_CONFIG[thread.mode]?.color + '22' }]}>
                   <Ionicons
@@ -171,11 +178,59 @@ function ThreadSidebar({ visible, threads, activeId, onSelect, onNew, onClose, o
                   />
                 </View>
                 <View style={styles.threadInfo}>
-                  <Text style={styles.threadTitle} numberOfLines={1}>{thread.title}</Text>
+                  {editingId === thread.id ? (
+                    <TextInput
+                      style={styles.threadRenameInput}
+                      value={tempTitle}
+                      onChangeText={setTempTitle}
+                      autoFocus
+                      onBlur={() => {
+                        if (tempTitle.trim()) {
+                          onRename(thread.id, tempTitle.trim());
+                        }
+                        setEditingId(null);
+                      }}
+                      onSubmitEditing={() => {
+                        if (tempTitle.trim()) {
+                          onRename(thread.id, tempTitle.trim());
+                        }
+                        setEditingId(null);
+                      }}
+                    />
+                  ) : (
+                    <Text style={styles.threadTitle} numberOfLines={1}>{thread.title}</Text>
+                  )}
                   <Text style={styles.threadTime}>
-                    {new Date(thread.updatedAt).toLocaleDateString('hi-IN')}
+                    {new Date(thread.updatedAt).toLocaleDateString('en-US')}
                   </Text>
                 </View>
+                
+                {editingId !== thread.id && (
+                  <View style={styles.threadActions}>
+                    <TouchableOpacity
+                      onPress={(e) => {
+                        e.stopPropagation();
+                        setTempTitle(thread.title);
+                        setEditingId(thread.id);
+                      }}
+                      style={styles.threadActionBtn}
+                    >
+                      <Ionicons name="pencil" size={14} color={COLORS.textMuted} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={(e) => {
+                        e.stopPropagation();
+                        Alert.alert('Delete Thread?', 'Are you sure you want to delete this conversation?', [
+                          { text: 'Cancel', style: 'cancel' },
+                          { text: 'Delete', style: 'destructive', onPress: () => onDelete(thread.id) },
+                        ]);
+                      }}
+                      style={styles.threadActionBtn}
+                    >
+                      <Ionicons name="trash" size={14} color="#ff4444" />
+                    </TouchableOpacity>
+                  </View>
+                )}
               </TouchableOpacity>
             ))
           )}
@@ -197,6 +252,7 @@ export default function SuariScreen() {
     setActiveThread,
     addMessage,
     updateMessage,
+    updateThread,
     deleteThread,
     updateSuariMemory,
   } = useAppStore();
@@ -338,8 +394,12 @@ export default function SuariScreen() {
     }
   };
 
+  const handleRenameThread = useCallback((id: string, newTitle: string) => {
+    updateThread(id, { title: newTitle });
+  }, [updateThread]);
+
   const handleDeleteThread = (id: string) => {
-    Alert.alert('Delete Conversation?', 'Ye conversation permanently delete ho jayegi.', [
+    Alert.alert('Delete Conversation?', 'Are you sure you want to delete this conversation?', [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Delete', style: 'destructive', onPress: () => deleteThread(id) },
     ]);
@@ -500,6 +560,7 @@ export default function SuariScreen() {
         onNew={() => createNewThread()}
         onClose={() => setShowSidebar(false)}
         onDelete={handleDeleteThread}
+        onRename={handleRenameThread}
       />
     </View>
   );
@@ -719,17 +780,17 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(124,92,252,0.4)',
   },
 
-  // Loading dots
-  loadingDots: {
+  premiumLoadingContainer: {
     flexDirection: 'row',
-    gap: 4,
-    padding: 4,
+    alignItems: 'center',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
   },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: COLORS.primary,
+  premiumLoadingText: {
+    fontSize: 13,
+    color: COLORS.accent,
+    fontFamily: 'SpaceGrotesk-Medium',
+    fontStyle: 'italic',
   },
 
   // Input
@@ -833,10 +894,30 @@ const styles = StyleSheet.create({
     fontFamily: 'SpaceGrotesk-Medium',
     color: COLORS.textPrimary,
   },
+  threadRenameInput: {
+    color: COLORS.textPrimary,
+    fontSize: 13,
+    fontFamily: 'SpaceGrotesk-Medium',
+    padding: 0,
+    margin: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.primary,
+  },
   threadTime: {
     fontSize: 11,
     fontFamily: 'SpaceGrotesk-Regular',
     color: COLORS.textMuted,
+  },
+  threadActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginLeft: 8,
+  },
+  threadActionBtn: {
+    padding: 4,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 6,
   },
   noThreads: {
     color: COLORS.textMuted,

@@ -108,6 +108,7 @@ interface AppState {
   setActiveThread: (id: string | null) => void;
   addMessage: (threadId: string, message: ChatMessage) => void;
   updateMessage: (threadId: string, messageId: string, updates: Partial<ChatMessage>) => void;
+  updateThread: (id: string, updates: Partial<ChatThread>) => void;
   deleteThread: (id: string) => void;
   updateSuariMemory: (updates: Partial<SuariMemory>) => void;
 
@@ -345,6 +346,12 @@ export const useAppStore = create<AppState>((set, get) => ({
     set((s) => ({
       threads: s.threads.filter((t) => t.id !== id),
       activeThreadId: s.activeThreadId === id ? null : s.activeThreadId,
+    }));
+    get().persist();
+  },
+  updateThread: (id, updates) => {
+    set((s) => ({
+      threads: s.threads.map((t) => (t.id === id ? { ...t, ...updates, updatedAt: new Date().toISOString() } : t)),
     }));
     get().persist();
   },
