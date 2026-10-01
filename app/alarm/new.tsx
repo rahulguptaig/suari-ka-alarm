@@ -61,9 +61,9 @@ export default function NewAlarmScreen() {
 
     try {
       await scheduleAlarm(newAlarm);
-      Alert.alert('✅ Alarm Set!', `Alarm ${selectedHour}:${selectedMinute} ${selectedPeriod} ke liye set ho gaya!`);
+      Alert.alert('Alarm Set!', `Alarm set for ${selectedHour}:${selectedMinute} ${selectedPeriod}`);
     } catch (e) {
-      Alert.alert('⚠️ Warning', 'Alarm save ho gaya lekin notification schedule nahi ho saka.');
+      Alert.alert('Notice', 'Alarm saved but could not schedule notification.');
     }
 
     router.back();

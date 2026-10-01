@@ -115,9 +115,12 @@ function SubjectCard({ subject, onPress, onDelete }: {
             {Math.round(progress * 100)}% complete
           </Text>
           {daysLeft !== null && (
-            <Text style={[styles.examDays, { color: daysLeft < 7 ? COLORS.error : COLORS.textMuted }]}>
-              📅 {daysLeft > 0 ? `${daysLeft} days left` : 'Exam aaj!'}
-            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+              <Ionicons name="calendar-outline" size={10} color={daysLeft < 7 ? COLORS.error : COLORS.textMuted} />
+              <Text style={[styles.examDays, { color: daysLeft < 7 ? COLORS.error : COLORS.textMuted }]}>
+                {daysLeft > 0 ? `${daysLeft} days left` : 'Exam Today!'}
+              </Text>
+            </View>
           )}
         </View>
       </LinearGradient>
@@ -183,7 +186,7 @@ export default function SyllabusScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.headerTitle}>📚 Syllabus Tracker</Text>
+          <Text style={styles.headerTitle}>Syllabus Tracker</Text>
           <Text style={styles.headerSubtitle}>
             {subjects.length} subjects • Track your progress
           </Text>

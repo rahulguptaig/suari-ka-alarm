@@ -122,7 +122,10 @@ function AlarmCard({ alarm, onToggle, onPress, onDelete }: {
                 <Text style={styles.alarmDays}>{daysText}</Text>
               </View>
               {nextTime && (
-                <Text style={styles.alarmNext}>🔔 {nextTime}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                  <Ionicons name="notifications" size={14} color={COLORS.primary} />
+                  <Text style={styles.alarmNext}>{nextTime}</Text>
+                </View>
               )}
             </View>
 

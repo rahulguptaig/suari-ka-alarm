@@ -32,7 +32,7 @@ export default function SettingsScreen() {
   const handleSaveKey = () => {
     setApiKey(tempKey.trim());
     setEditingKey(false);
-    Alert.alert('✅ Saved!', 'API key has been saved. Suari AI is ready to use!');
+    Alert.alert('Saved!', 'API key has been saved. Suari AI is ready to use!');
   };
 
   const stats = [
@@ -46,7 +46,7 @@ export default function SettingsScreen() {
     <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>⚙️ {t(language, 'settings_title')}</Text>
+        <Text style={styles.headerTitle}>{t(language, 'settings_title')}</Text>
       </View>
 
       {/* Profile Card */}
@@ -76,7 +76,10 @@ export default function SettingsScreen() {
               <Text style={styles.profileName}>
                 {userName || 'Apna naam set karo'}
               </Text>
-              <Text style={styles.profileEdit}>✏️ Tap to edit</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                <Ionicons name="pencil" size={12} color={COLORS.primary} />
+                <Text style={styles.profileEdit}>Tap to edit</Text>
+              </View>
             </TouchableOpacity>
           )}
         </View>
@@ -95,7 +98,7 @@ export default function SettingsScreen() {
 
       {/* Language Selector */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>🌐 {t(language, 'language')}</Text>
+        <Text style={styles.sectionTitle}>{t(language, 'language')}</Text>
         <LinearGradient colors={['rgba(18,18,42,0.9)', 'rgba(13,13,34,0.8)']} style={styles.aboutCard}>
           <TouchableOpacity 
             style={styles.langSelector}
@@ -129,17 +132,17 @@ export default function SettingsScreen() {
 
       {/* Suari AI Status */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>🤖 Suari AI Status</Text>
+        <Text style={styles.sectionTitle}>Suari AI Status</Text>
         <LinearGradient colors={['rgba(255,107,157,0.1)', 'rgba(124,92,252,0.08)']} style={styles.apiCard}>
           <View style={styles.apiHeader}>
             <MaterialCommunityIcons name="robot-outline" size={20} color={COLORS.accent} />
             <Text style={styles.apiTitle}>Suari AI</Text>
             <View style={styles.activeBadge}>
-              <Text style={styles.activeBadgeText}>● Active</Text>
+              <Text style={styles.activeBadgeText}>Active</Text>
             </View>
           </View>
           <Text style={styles.apiDesc}>
-            Suari AI powered by Experiential Labs. Chat, Agent, and Research modes available. 🌟
+            Suari AI powered by Experiential Labs. Chat, Agent, and Research modes available.
           </Text>
           
           <View style={styles.keyDisplay}>
@@ -173,9 +176,12 @@ export default function SettingsScreen() {
               </View>
             ) : (
               <>
-                <Text style={styles.keyText} numberOfLines={1}>
-                  🔑 {apiKey ? `${apiKey.substring(0, 8)}...${apiKey.slice(-4)}` : 'API Key is not set'}
-                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flex: 1 }}>
+                  <Ionicons name="key" size={14} color={COLORS.textPrimary} />
+                  <Text style={styles.keyText} numberOfLines={1}>
+                    {apiKey ? `${apiKey.substring(0, 8)}...${apiKey.slice(-4)}` : 'API Key is not set'}
+                  </Text>
+                </View>
                 <TouchableOpacity onPress={() => setShowKey(true)}>
                   <Text style={[styles.profileEdit, { color: COLORS.primary }]}>Change</Text>
                 </TouchableOpacity>
@@ -198,7 +204,7 @@ export default function SettingsScreen() {
 
       {/* About Section */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>ℹ️ App Info</Text>
+        <Text style={styles.sectionTitle}>App Info</Text>
         <LinearGradient colors={['rgba(18,18,42,0.9)', 'rgba(13,13,34,0.8)']} style={styles.aboutCard}>
           <View style={styles.aboutRow}>
             <Text style={styles.aboutLabel}>App Name</Text>
@@ -210,7 +216,7 @@ export default function SettingsScreen() {
           </View>
           <View style={styles.aboutRow}>
             <Text style={styles.aboutLabel}>AI Agent</Text>
-            <Text style={[styles.aboutValue, { color: COLORS.accent }]}>Suari 🌟</Text>
+            <Text style={[styles.aboutValue, { color: COLORS.accent }]}>Suari</Text>
           </View>
           <View style={styles.aboutRow}>
             <Text style={styles.aboutLabel}>Backend</Text>
@@ -225,7 +231,7 @@ export default function SettingsScreen() {
 
       {/* Features List */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>✨ Features</Text>
+        <Text style={styles.sectionTitle}>Features</Text>
         {[
           { icon: 'alarm-outline', text: 'Smart Alarm with Snooze & Repeat', color: COLORS.primary },
           { icon: 'robot-outline', text: 'Suari AI Agent (Chat/Agent/Research)', color: COLORS.accent },
@@ -247,7 +253,7 @@ export default function SettingsScreen() {
       {/* Made with love */}
       <View style={styles.footer}>
         <LinearGradient colors={['#FF6B9D', '#7C5CFC']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.footerGrad}>
-          <Text style={styles.footerText}>Made with ❤️ for Suari Ka Alarm</Text>
+          <Text style={styles.footerText}>Made for Suari Ka Alarm</Text>
         </LinearGradient>
       </View>
     </ScrollView>

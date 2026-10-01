@@ -192,9 +192,12 @@ function TodoCard({ item, onToggle, onDelete }: {
                 </View>
               ) : null}
               {item.isCompleted && item.completedAt ? (
-                <Text style={styles.completedAt}>
-                  ✅ {new Date(item.completedAt).toLocaleDateString('hi-IN')}
-                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                  <Ionicons name="checkmark-circle" size={12} color={COLORS.success} />
+                  <Text style={styles.completedAt}>
+                    {new Date(item.completedAt).toLocaleDateString('en-US')}
+                  </Text>
+                </View>
               ) : null}
             </View>
           </View>
@@ -268,10 +271,9 @@ export default function TodoScreen() {
   const FILTERS: { key: FilterType; label: string }[] = [
     { key: 'all', label: 'All' },
     { key: 'pending', label: 'Pending' },
-    { key: 'completed', label: 'Done' },
-    { key: 'high', label: '🔴 High' },
-    { key: 'medium', label: '🟡 Medium' },
-    { key: 'low', label: '🟢 Low' },
+    { key: 'high', label: 'High' },
+    { key: 'medium', label: 'Medium' },
+    { key: 'low', label: 'Low' },
   ];
 
   return (
@@ -279,7 +281,7 @@ export default function TodoScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.headerTitle}>📝 To-Do List</Text>
+          <Text style={styles.headerTitle}>To-Do List</Text>
           <Text style={styles.headerSubtitle}>
             {stats.pending} pending • {stats.completed} done
           </Text>

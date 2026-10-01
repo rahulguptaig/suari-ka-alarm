@@ -55,9 +55,9 @@ export default function AddSyllabusScreen() {
           subtopics: result.subtopics[t] || [],
         }));
         setTopics(fetchedTopics);
-        Alert.alert('✅ Syllabus Ready!', `${result.topics.length} topics fetch ho gaye Suari AI se!`);
+        Alert.alert('Syllabus Ready!', `${result.topics.length} topics fetched from Suari AI!`);
       } else {
-        Alert.alert('⚠️ Koi Topics Nahi', 'AI koi topic nahi de saka. Manually add karo.');
+        Alert.alert('No Topics Found', 'AI could not provide topics. Add them manually.');
       }
     } catch (e: any) {
       Alert.alert('Error', e.message);
@@ -99,7 +99,7 @@ export default function AddSyllabusScreen() {
     };
 
     addSubject(newSubject);
-    Alert.alert('✅ Subject Added!', `${subjectName} with ${syllabusTopics.length} topics add ho gaya!`);
+    Alert.alert('Subject Added!', `${subjectName} with ${syllabusTopics.length} topics added!`);
     router.back();
   };
 

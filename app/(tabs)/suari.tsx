@@ -371,7 +371,7 @@ export default function SuariScreen() {
 
     } catch (error: any) {
       updateMessage(activeThreadId, loadingMsg.id, {
-        content: `❌ Error: ${error.message}\n\nAPI key check karein Settings mein.`,
+        content: `Error: ${error.message}\n\nPlease check your API key in Settings.`,
         isLoading: false,
       });
     } finally {
@@ -428,7 +428,7 @@ export default function SuariScreen() {
           </LinearGradient>
           <View>
             <Text style={styles.headerName}>Suari</Text>
-            <Text style={styles.headerStatus}>● Online</Text>
+            <Text style={styles.headerStatus}>Online</Text>
           </View>
         </View>
 
@@ -487,7 +487,7 @@ export default function SuariScreen() {
                 <Text style={styles.welcomeAvatarText}>S</Text>
               </LinearGradient>
               <Text style={styles.welcomeTitle}>
-                Namaste{userName ? `, ${userName}` : ''}! Main Suari hoon 🌟
+                Hello{userName ? `, ${userName}` : ''}! I am Suari.
               </Text>
               <Text style={styles.welcomeSubtitle}>
                 {MODE_CONFIG[mode].description}

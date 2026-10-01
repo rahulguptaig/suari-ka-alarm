@@ -57,7 +57,7 @@ export default function AlarmDetailScreen() {
     } else {
       await cancelAlarm();
     }
-    Alert.alert('✅ Saved!', 'Alarm update ho gaya!');
+    Alert.alert('Saved!', 'Alarm updated successfully!');
     router.back();
   };
 
@@ -106,7 +106,7 @@ export default function AlarmDetailScreen() {
 
           <View style={styles.toggleRow}>
             <Text style={styles.toggleLabel}>
-              {localAlarm.isEnabled ? '🟢 Active' : '⭕ Disabled'}
+              {localAlarm.isEnabled ? 'Active' : 'Disabled'}
             </Text>
             <Switch
               value={localAlarm.isEnabled}

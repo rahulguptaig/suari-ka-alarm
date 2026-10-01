@@ -64,7 +64,7 @@ function TopicRow({ topic, color, onStatusChange, onDelete }: {
       <View style={styles.topicActions}>
         <View style={[styles.statusPill, { backgroundColor: status.color + '20' }]}>
           <Text style={[styles.statusPillText, { color: status.color }]}>
-            {status.label === 'Not Started' ? '—' : status.label === 'In Progress' ? '⏳' : '✅'}
+            {status.label === 'Not Started' ? '—' : status.label === 'In Progress' ? 'In Progress' : 'Done'}
           </Text>
         </View>
         <TouchableOpacity onPress={onDelete} style={styles.deleteTopicBtn}>
@@ -125,7 +125,7 @@ export default function SyllabusDetailScreen() {
         4,
         subject.examDate || 'Jaldi'
       );
-      Alert.alert(`📅 ${subject.name} Study Plan`, plan, [{ text: 'OK' }]);
+      Alert.alert(`${subject.name} Study Plan`, plan, [{ text: 'OK' }]);
     } catch (e: any) {
       Alert.alert('Error', e.message);
     } finally {
@@ -186,7 +186,7 @@ export default function SyllabusDetailScreen() {
           </View>
           {subject.examDate && (
             <Text style={styles.examDate}>
-              📅 Exam: {new Date(subject.examDate).toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+              Exam: {new Date(subject.examDate).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
             </Text>
           )}
         </LinearGradient>
@@ -203,7 +203,7 @@ export default function SyllabusDetailScreen() {
           </View>
 
           <Text style={styles.tapHint}>
-            💡 Tap karo status change karne ke liye: ○ → ⏳ → ✅
+            Tap to change status: ○ -> In Progress -> Done
           </Text>
 
           {addingTopic && (
