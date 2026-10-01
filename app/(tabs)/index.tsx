@@ -30,7 +30,15 @@ function LiveClock() {
   const minutes = String(time.getMinutes()).padStart(2, '0');
   const seconds = String(time.getSeconds()).padStart(2, '0');
   const period = time.getHours() >= 12 ? 'PM' : 'AM';
-  const dateStr = time.toLocaleDateString('hi-IN', {
+  const { language } = useAppStore();
+  const localeMap: Record<string, string> = {
+    en: 'en-US',
+    hin: 'en-IN',
+    hi: 'hi-IN',
+    bhoj: 'hi-IN',
+  };
+
+  const dateStr = time.toLocaleDateString(localeMap[language] || 'en-US', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',

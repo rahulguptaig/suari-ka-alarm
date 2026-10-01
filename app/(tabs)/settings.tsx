@@ -32,7 +32,7 @@ export default function SettingsScreen() {
   const handleSaveKey = () => {
     setApiKey(tempKey.trim());
     setEditingKey(false);
-    Alert.alert('✅ Saved!', 'API key save ho gaya. Ab Suari use kar sakte ho!');
+    Alert.alert('✅ Saved!', 'API key has been saved. Suari AI is ready to use!');
   };
 
   const stats = [
@@ -139,7 +139,7 @@ export default function SettingsScreen() {
             </View>
           </View>
           <Text style={styles.apiDesc}>
-            Suari AI powered by Experiential Labs. Chat, Agent aur Research modes available hain. 🌟
+            Suari AI powered by Experiential Labs. Chat, Agent, and Research modes available. 🌟
           </Text>
           
           <View style={styles.keyDisplay}>
@@ -174,7 +174,7 @@ export default function SettingsScreen() {
             ) : (
               <>
                 <Text style={styles.keyText} numberOfLines={1}>
-                  🔑 {apiKey ? `${apiKey.substring(0, 8)}...${apiKey.slice(-4)}` : 'API Key set nahi hai'}
+                  🔑 {apiKey ? `${apiKey.substring(0, 8)}...${apiKey.slice(-4)}` : 'API Key is not set'}
                 </Text>
                 <TouchableOpacity onPress={() => setShowKey(true)}>
                   <Text style={[styles.profileEdit, { color: COLORS.primary }]}>Change</Text>
