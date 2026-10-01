@@ -74,7 +74,7 @@ export default function SettingsScreen() {
           ) : (
             <TouchableOpacity onPress={() => { setEditingName(true); setTempName(userName); }}>
               <Text style={styles.profileName}>
-                {userName || 'Apna naam set karo'}
+                {userName || 'Set your name'}
               </Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                 <Ionicons name="pencil" size={12} color={COLORS.primary} />
@@ -96,39 +96,7 @@ export default function SettingsScreen() {
         ))}
       </View>
 
-      {/* Language Selector */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{t(language, 'language')}</Text>
-        <LinearGradient colors={['rgba(18,18,42,0.9)', 'rgba(13,13,34,0.8)']} style={styles.aboutCard}>
-          <TouchableOpacity 
-            style={styles.langSelector}
-            onPress={() => setShowLangMenu(!showLangMenu)}
-          >
-            <Text style={styles.aboutValue}>{languages[language]}</Text>
-            <Ionicons name={showLangMenu ? "chevron-up" : "chevron-down"} size={20} color={COLORS.textSecondary} />
-          </TouchableOpacity>
-          
-          {showLangMenu && (
-            <View style={styles.langMenu}>
-              {(Object.keys(languages) as LanguageCode[]).map((lang) => (
-                <TouchableOpacity 
-                  key={lang}
-                  style={[styles.langOption, language === lang && styles.langOptionActive]}
-                  onPress={() => {
-                    setLanguage(lang);
-                    setShowLangMenu(false);
-                  }}
-                >
-                  <Text style={[styles.langOptionText, language === lang && {color: COLORS.primary}]}>
-                    {languages[lang]}
-                  </Text>
-                  {language === lang && <Ionicons name="checkmark" size={18} color={COLORS.primary} />}
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </LinearGradient>
-      </View>
+
 
 
 

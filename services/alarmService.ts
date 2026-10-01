@@ -35,7 +35,7 @@ export async function requestAlarmPermissions(): Promise<boolean> {
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
       lightColor: '#7C5CFC',
-      sound: 'alarm.mp3',
+      sound: 'default',
       enableVibrate: true,
       lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
     });
@@ -62,9 +62,9 @@ export async function scheduleAlarm(alarm: Alarm): Promise<string[]> {
       if (alarm.days[i]) {
         const id = await Notifications.scheduleNotificationAsync({
           content: {
-            title: '⏰ ' + (alarm.label || 'Suari Ka Alarm'),
-            body: `Good morning! ${new Date().toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' })}`,
-            sound: alarm.sound === 'default' ? true : `${alarm.sound}.mp3`,
+            title: alarm.label || 'Suari Ka Alarm',
+            body: `Good morning! ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`,
+            sound: true,
             vibrate: alarm.vibrate ? [0, 500, 200, 500] : undefined,
             priority: Notifications.AndroidNotificationPriority.MAX,
             categoryIdentifier: 'alarm',
@@ -93,8 +93,8 @@ export async function scheduleAlarm(alarm: Alarm): Promise<string[]> {
 
     const id = await Notifications.scheduleNotificationAsync({
       content: {
-        title: '⏰ ' + (alarm.label || 'Suari Ka Alarm'),
-        body: `Uthao! ${alarm.label || 'Alarm baj raha hai!'}`,
+        title: alarm.label || 'Suari Ka Alarm',
+        body: `Wake up! ${alarm.label || 'Alarm is ringing!'}`,
         sound: true,
         vibrate: alarm.vibrate ? [0, 500, 200, 500] : undefined,
         priority: Notifications.AndroidNotificationPriority.MAX,
@@ -150,12 +150,12 @@ export async function setupAlarmActions(): Promise<void> {
   await Notifications.setNotificationCategoryAsync('alarm', [
     {
       identifier: 'snooze',
-      buttonTitle: '😴 5 min Snooze',
+      buttonTitle: '5 min Snooze',
       options: { opensAppToForeground: false },
     },
     {
       identifier: 'dismiss',
-      buttonTitle: '✅ Dismiss',
+      buttonTitle: 'Dismiss',
       options: { opensAppToForeground: false, isDestructive: true },
     },
   ]);
@@ -203,9 +203,9 @@ function formatTimeDiff(ms: number): string {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
 
-  if (hours === 0) return `${minutes} min mein`;
-  if (minutes === 0) return `${hours} ghante mein`;
-  return `${hours} ghante ${minutes} min mein`;
+  if (hours === 0) return `in ${minutes} mins`;
+  if (minutes === 0) return `in ${hours} hrs`;
+  return `in ${hours} hrs ${minutes} mins`;
 }
 
 export function getAlarmDaysText(days: boolean[]): string {

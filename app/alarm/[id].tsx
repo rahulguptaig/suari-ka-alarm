@@ -31,7 +31,7 @@ export default function AlarmDetailScreen() {
   if (!alarm || !localAlarm) {
     return (
       <View style={[styles.container, { alignItems: 'center', justifyContent: 'center' }]}>
-        <Text style={{ color: COLORS.textMuted, fontSize: 16 }}>Alarm nahi mila!</Text>
+        <Text style={{ color: COLORS.textMuted, fontSize: 16 }}>Alarm not found!</Text>
         <TouchableOpacity onPress={() => router.back()} style={{ marginTop: 16 }}>
           <Text style={{ color: COLORS.primary }}>Wapas Jao</Text>
         </TouchableOpacity>
@@ -81,7 +81,7 @@ export default function AlarmDetailScreen() {
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="close" size={24} color={COLORS.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Alarm Edit Karo</Text>
+        <Text style={styles.headerTitle}>Edit Alarm</Text>
         <View style={styles.headerRight}>
           {changed && (
             <TouchableOpacity onPress={handleSave} style={styles.saveBtn}>
@@ -199,7 +199,7 @@ export default function AlarmDetailScreen() {
         {/* Delete Button */}
         <TouchableOpacity onPress={handleDelete} style={styles.deleteBtn}>
           <Ionicons name="trash-outline" size={20} color={COLORS.error} />
-          <Text style={styles.deleteBtnText}>Alarm Delete Karo</Text>
+          <Text style={styles.deleteBtnText}>Delete Alarm</Text>
         </TouchableOpacity>
 
         {/* Save Button */}
@@ -207,7 +207,7 @@ export default function AlarmDetailScreen() {
           <TouchableOpacity onPress={handleSave} style={styles.saveFab}>
             <LinearGradient colors={['#7C5CFC', '#5B3FD9']} style={styles.saveFabGrad}>
               <Ionicons name="checkmark" size={20} color="#fff" />
-              <Text style={styles.saveFabText}>Changes Save Karo</Text>
+              <Text style={styles.saveFabText}>Save Changes</Text>
             </LinearGradient>
           </TouchableOpacity>
         )}

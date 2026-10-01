@@ -446,9 +446,9 @@ export default function SuariScreen() {
   };
 
   const suggestedPrompts = {
-    chat: ['Mujhe motivate karo!', 'Study tips batao', 'Time management kaise karein?'],
-    agent: ['Kal subah 6 baje alarm set karo', 'Math ki to-do list banao', 'Mera schedule dekhao'],
-    research: ['Photosynthesis explain karo', 'Indian history key events', 'Quantum physics basics'],
+    chat: ['Motivate me!', 'Give me study tips', 'How to manage time?'],
+    agent: ['Set an alarm for 6 AM tomorrow', 'Create a Math to-do list', 'Show my schedule'],
+    research: ['Explain photosynthesis', 'Indian history key events', 'Quantum physics basics'],
   };
 
   return (
@@ -535,7 +535,7 @@ export default function SuariScreen() {
 
               {/* Suggested prompts */}
               <View style={styles.suggestionsContainer}>
-                <Text style={styles.suggestionsTitle}>Kuch try karo:</Text>
+                <Text style={styles.suggestionsTitle}>Try asking:</Text>
                 {suggestedPrompts[mode].map((prompt, i) => (
                   <TouchableOpacity
                     key={i}
@@ -564,7 +564,7 @@ export default function SuariScreen() {
               style={styles.textInput}
               value={input}
               onChangeText={setInput}
-              placeholder={`${MODE_CONFIG[mode].label} mode mein kuch poochho...`}
+              placeholder={`Ask something in ${MODE_CONFIG[mode].label} mode...`}
               placeholderTextColor={COLORS.textMuted}
               multiline
               maxLength={2000}

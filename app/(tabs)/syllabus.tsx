@@ -173,7 +173,7 @@ export default function SyllabusScreen() {
   const handleDelete = (subject: SyllabusSubject) => {
     Alert.alert(
       'Delete Subject?',
-      `"${subject.name}" aur uske saare topics delete ho jayenge.`,
+      `"${subject.name}" and all its topics will be deleted.`,
       [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Delete', style: 'destructive', onPress: () => deleteSubject(subject.id) },
@@ -228,16 +228,16 @@ export default function SyllabusScreen() {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <MaterialCommunityIcons name="book-open-page-variant-outline" size={80} color="rgba(124,92,252,0.3)" />
-            <Text style={styles.emptyTitle}>Koi Subject Nahi Hai!</Text>
+            <Text style={styles.emptyTitle}>No Subjects Found!</Text>
             <Text style={styles.emptySubtitle}>
-              + button dabao aur apna pehla subject add karo. Suari AI se syllabus bhi fetch kar sakte ho!
+              Press + to add your first subject. You can also fetch the syllabus using Suari AI!
             </Text>
             <TouchableOpacity
               style={styles.emptyAddBtn}
               onPress={() => router.push('/syllabus/add')}
             >
               <LinearGradient colors={['#7C5CFC', '#5B3FD9']} style={styles.emptyAddBtnGrad}>
-                <Text style={styles.emptyAddBtnText}>Subject Add Karo</Text>
+                <Text style={styles.emptyAddBtnText}>Add Subject</Text>
               </LinearGradient>
             </TouchableOpacity>
           </View>

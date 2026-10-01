@@ -76,7 +76,7 @@ export default function NewAlarmScreen() {
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="close" size={24} color={COLORS.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Naya Alarm</Text>
+        <Text style={styles.headerTitle}>New Alarm</Text>
         <TouchableOpacity onPress={handleSave} style={styles.saveBtn}>
           <LinearGradient colors={['#7C5CFC', '#5B3FD9']} style={styles.saveBtnGrad}>
             <Text style={styles.saveBtnText}>Save</Text>
@@ -164,11 +164,11 @@ export default function NewAlarmScreen() {
           <TouchableOpacity
             style={styles.labelInput}
             onPress={() => {
-              Alert.prompt('Alarm Label', 'Alarm ka naam dalo:', (text) => setLabel(text), 'plain-text', label);
+              Alert.prompt('Alarm Label', 'Enter alarm name:', (text) => setLabel(text), 'plain-text', label);
             }}
           >
             <Text style={[styles.labelText, !label && styles.labelPlaceholder]}>
-              {label || 'Alarm ka naam (optional)'}
+              {label || 'Alarm Name (Optional)'}
             </Text>
             <Ionicons name="pencil" size={16} color={COLORS.textMuted} />
           </TouchableOpacity>

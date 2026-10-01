@@ -187,8 +187,8 @@ export default function AlarmScreen() {
 
   const handleDelete = useCallback((alarm: Alarm) => {
     Alert.alert(
-      'Alarm Delete Karein?',
-      `"${alarm.label || alarm.time}" wala alarm delete hoga.`,
+      'Delete Alarm?',
+      `The alarm "${alarm.label || alarm.time}" will be deleted.`,
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -208,8 +208,8 @@ export default function AlarmScreen() {
   const renderEmpty = () => (
     <View style={styles.emptyContainer}>
       <MaterialCommunityIcons name="alarm-off" size={80} color="rgba(124,92,252,0.3)" />
-      <Text style={styles.emptyTitle}>Koi Alarm Nahi Hai</Text>
-      <Text style={styles.emptySubtitle}>+ button dabao aur apna pehla alarm set karo!</Text>
+      <Text style={styles.emptyTitle}>No Alarms</Text>
+      <Text style={styles.emptySubtitle}>Press + to add your first alarm!</Text>
     </View>
   );
 

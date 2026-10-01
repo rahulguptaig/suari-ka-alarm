@@ -251,5 +251,5 @@ export const translations = {
 };
 
 export const t = (lang: LanguageCode, key: keyof typeof translations['en']) => {
-  return translations[lang]?.[key] || translations['en'][key] || key;
+  return translations['en'][key] || key;
 };

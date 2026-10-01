@@ -37,12 +37,12 @@ export default function AddSyllabusScreen() {
 
   const handleFetchWithAI = useCallback(async () => {
     if (!subjectName.trim()) {
-      Alert.alert('Subject Name', 'Pehle subject ka naam dalo!');
+      Alert.alert('Subject Name', 'Please enter subject name first!');
       return;
     }
 
     if (!apiKey) {
-      Alert.alert('API Key', 'Settings mein Experiential Labs API key daalo pehle!');
+      Alert.alert('API Key', 'Please enter Experiential Labs API key in Settings first!');
       return;
     }
 
@@ -78,7 +78,7 @@ export default function AddSyllabusScreen() {
 
   const handleSave = () => {
     if (!subjectName.trim()) {
-      Alert.alert('Naam Chahiye', 'Subject ka naam dalo!');
+      Alert.alert('Name Required', 'Please enter subject name!');
       return;
     }
 
@@ -110,7 +110,7 @@ export default function AddSyllabusScreen() {
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="close" size={24} color={COLORS.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Subject Add Karo</Text>
+        <Text style={styles.headerTitle}>Add Subject</Text>
         <TouchableOpacity onPress={handleSave} style={styles.saveBtn}>
           <LinearGradient colors={['#7C5CFC', '#5B3FD9']} style={styles.saveBtnGrad}>
             <Text style={styles.saveBtnText}>Save</Text>
@@ -181,9 +181,9 @@ export default function AddSyllabusScreen() {
           <View style={styles.aiCardHeader}>
             <MaterialCommunityIcons name="robot-outline" size={24} color={COLORS.accent} />
             <View style={styles.aiCardText}>
-              <Text style={styles.aiCardTitle}>Suari AI se Syllabus Fetch Karo</Text>
+              <Text style={styles.aiCardTitle}>Fetch Syllabus with Suari AI</Text>
               <Text style={styles.aiCardSubtitle}>
-                AI automatically aapke subject ka syllabus internet se dhundh ke de degi
+                AI will automatically generate syllabus topics for your subject
               </Text>
             </View>
           </View>
@@ -200,7 +200,7 @@ export default function AddSyllabusScreen() {
                 <Ionicons name="sparkles" size={18} color="#fff" />
               )}
               <Text style={styles.fetchBtnText}>
-                {isAIFetching ? 'Suari dhundh rahi hai...' : 'AI se Syllabus Lo'}
+                {isAIFetching ? 'Suari is fetching...' : 'Fetch with AI'}
               </Text>
             </LinearGradient>
           </TouchableOpacity>
@@ -218,7 +218,7 @@ export default function AddSyllabusScreen() {
 
           {topics.length === 0 ? (
             <Text style={styles.noTopics}>
-              AI se fetch karo ya manually topics add karo
+              Fetch with AI or add topics manually
             </Text>
           ) : (
             <View style={styles.topicsList}>
@@ -242,7 +242,7 @@ export default function AddSyllabusScreen() {
         <TouchableOpacity onPress={handleSave} style={styles.saveFab}>
           <LinearGradient colors={['#7C5CFC', '#5B3FD9']} style={styles.saveFabGrad}>
             <Ionicons name="checkmark" size={20} color="#fff" />
-            <Text style={styles.saveFabText}>Subject Save Karo</Text>
+            <Text style={styles.saveFabText}>Save Subject</Text>
           </LinearGradient>
         </TouchableOpacity>
       </ScrollView>
@@ -252,7 +252,7 @@ export default function AddSyllabusScreen() {
         <Pressable style={styles.modalOverlay} onPress={() => setShowManualAdd(false)}>
           <Pressable style={styles.modal} onPress={e => e.stopPropagation()}>
             <LinearGradient colors={['#12122A', '#0D0D22']} style={styles.modalGrad}>
-              <Text style={styles.modalTitle}>Topic Add Karo</Text>
+              <Text style={styles.modalTitle}>Add Topic</Text>
               <TextInput
                 style={styles.textInput}
                 value={newTopicTitle}

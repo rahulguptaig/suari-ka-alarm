@@ -87,9 +87,9 @@ export default function SyllabusDetailScreen() {
   if (!subject) {
     return (
       <View style={[styles.container, { alignItems: 'center', justifyContent: 'center' }]}>
-        <Text style={{ color: COLORS.textMuted }}>Subject nahi mila!</Text>
+        <Text style={{ color: COLORS.textMuted }}>Subject not found!</Text>
         <TouchableOpacity onPress={() => router.back()}>
-          <Text style={{ color: COLORS.primary, marginTop: 16 }}>Wapas Jao</Text>
+          <Text style={{ color: COLORS.primary, marginTop: 16 }}>Go Back</Text>
         </TouchableOpacity>
       </View>
     );
@@ -114,7 +114,7 @@ export default function SyllabusDetailScreen() {
 
   const handleStudyPlan = async () => {
     if (!apiKey) {
-      Alert.alert('API Key Chahiye', 'Settings mein API key daalo!');
+      Alert.alert('API Key Required', 'Please enter your API key in Settings!');
       return;
     }
     setLoadingStudyPlan(true);
@@ -134,7 +134,7 @@ export default function SyllabusDetailScreen() {
   };
 
   const handleDeleteTopic = (topicId: string) => {
-    Alert.alert('Topic Delete Karein?', 'Ye topic permanently delete ho jayega.', [
+    Alert.alert('Delete Topic?', 'This topic will be permanently deleted.', [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Delete', style: 'destructive', onPress: () => deleteTopic(subject.id, topicId) },
     ]);
@@ -228,9 +228,9 @@ export default function SyllabusDetailScreen() {
 
           {subject.topics.length === 0 ? (
             <View style={styles.noTopicsContainer}>
-              <Text style={styles.noTopicsText}>Koi topic nahi hai abhi</Text>
+              <Text style={styles.noTopicsText}>No topics added yet</Text>
               <TouchableOpacity onPress={() => setAddingTopic(true)} style={styles.addFirstTopicBtn}>
-                <Text style={[styles.addFirstTopicText, { color: subject.color }]}>+ Pehla topic add karo</Text>
+                <Text style={[styles.addFirstTopicText, { color: subject.color }]}>+ Add first topic</Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -255,7 +255,7 @@ export default function SyllabusDetailScreen() {
           <LinearGradient colors={['#FF6B9D', '#7C5CFC']} style={styles.studyPlanGrad}>
             <Ionicons name="sparkles" size={18} color="#fff" />
             <Text style={styles.studyPlanText}>
-              {loadingStudyPlan ? 'Plan ban raha hai...' : 'Suari se Study Plan Lo'}
+              {loadingStudyPlan ? 'Generating Plan...' : 'Get Study Plan from Suari'}
             </Text>
           </LinearGradient>
         </TouchableOpacity>

@@ -55,11 +55,11 @@ function AddTodoModal({ visible, onClose, onAdd }: {
         <Pressable style={styles.modalContainer} onPress={e => e.stopPropagation()}>
           <LinearGradient colors={['#12122A', '#0D0D22']} style={styles.modalGrad}>
             <View style={styles.modalHandle} />
-            <Text style={styles.modalTitle}>Naya Task</Text>
+            <Text style={styles.modalTitle}>New Task</Text>
 
             <TextInput
               style={styles.modalInput}
-              placeholder="Task ka naam..."
+              placeholder="Task name..."
               placeholderTextColor={COLORS.textMuted}
               value={title}
               onChangeText={setTitle}
@@ -127,7 +127,7 @@ function AddTodoModal({ visible, onClose, onAdd }: {
                 disabled={!title.trim()}
               >
                 <LinearGradient colors={['#7C5CFC', '#5B3FD9']} style={styles.addBtnGrad}>
-                  <Text style={styles.addBtnText}>Task Add Karo</Text>
+                  <Text style={styles.addBtnText}>Add Task</Text>
                 </LinearGradient>
               </TouchableOpacity>
             </View>
@@ -262,7 +262,7 @@ export default function TodoScreen() {
   }, [addTodo]);
 
   const handleDelete = (item: TodoItem) => {
-    Alert.alert('Delete Task?', `"${item.title}" delete hoga.`, [
+    Alert.alert('Delete Task?', `"${item.title}" will be deleted.`, [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Delete', style: 'destructive', onPress: () => deleteTodo(item.id) },
     ]);
@@ -318,7 +318,7 @@ export default function TodoScreen() {
         <Ionicons name="search-outline" size={18} color={COLORS.textMuted} />
         <TextInput
           style={styles.searchInput}
-          placeholder="Tasks dhundho..."
+          placeholder="Search tasks..."
           placeholderTextColor={COLORS.textMuted}
           value={searchQuery}
           onChangeText={setSearchQuery}
@@ -366,10 +366,10 @@ export default function TodoScreen() {
           <View style={styles.emptyContainer}>
             <MaterialCommunityIcons name="clipboard-check-outline" size={70} color="rgba(124,92,252,0.3)" />
             <Text style={styles.emptyTitle}>
-              {searchQuery ? 'Koi task nahi mila' : 'Koi task nahi hai!'}
+              {searchQuery ? 'No tasks found' : 'No tasks available!'}
             </Text>
             <Text style={styles.emptySubtitle}>
-              {searchQuery ? 'Alag search try karo' : '+ dabao aur apna pehla task add karo'}
+              {searchQuery ? 'Try a different search term' : 'Press + to add your first task'}
             </Text>
           </View>
         }
