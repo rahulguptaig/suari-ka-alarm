@@ -11,6 +11,10 @@ import notifee, {
 import { Alarm } from '../store/useAppStore';
 import { DAYS } from '../constants/theme';
 
+notifee.onBackgroundEvent(async ({ type, detail }) => {
+  // Notifee background events handler
+});
+
 // ==================== PERMISSIONS ====================
 
 export async function requestAlarmPermissions(): Promise<boolean> {
