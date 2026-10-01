@@ -37,6 +37,15 @@ export async function requestAlarmPermissions(): Promise<boolean> {
       lightColor: '#7C5CFC',
       sound: 'default',
       enableVibrate: true,
+      bypassDnd: true,
+      audioAttributes: {
+        usage: Notifications.AndroidAudioUsage.ALARM,
+        contentType: Notifications.AndroidAudioContentType.SONIFICATION,
+        flags: {
+          enforceAudibility: true,
+          requestHardwareAudioVideoSynchronization: true,
+        },
+      },
       lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
     });
   }
