@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAppStore } from '../../store/useAppStore';
 import { COLORS, BORDER_RADIUS, SPACING, GRADIENTS } from '../../constants/theme';
+import { supabase } from '../../lib/supabase';
 import { t, languages, LanguageCode } from '../../locales';
 
 export default function SettingsScreen() {
@@ -149,6 +150,17 @@ export default function SettingsScreen() {
         ))}
       </View>
 
+      {/* Logout */}
+      <View style={styles.section}>
+        <TouchableOpacity 
+          style={styles.logoutButton}
+          onPress={() => supabase.auth.signOut()}
+        >
+          <Ionicons name="log-out-outline" size={20} color={COLORS.error} />
+          <Text style={styles.logoutText}>Sign Out</Text>
+        </TouchableOpacity>
+      </View>
+
       {/* Made with love */}
       <View style={styles.footer}>
         <LinearGradient colors={['#FF6B9D', '#7C5CFC']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.footerGrad}>
@@ -162,6 +174,25 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bg },
   content: { paddingBottom: 100 },
+
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: SPACING.sm,
+    backgroundColor: 'rgba(255,82,82,0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,82,82,0.2)',
+    padding: SPACING.md,
+    borderRadius: BORDER_RADIUS.md,
+    marginHorizontal: SPACING.lg,
+    marginTop: SPACING.lg,
+  },
+  logoutText: {
+    color: COLORS.error,
+    fontSize: 16,
+    fontFamily: 'SpaceGrotesk-Bold',
+  },
 
   header: {
     paddingHorizontal: SPACING.lg,
