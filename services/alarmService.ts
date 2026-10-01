@@ -1,17 +1,15 @@
-import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
+import notifee, { 
+  AndroidImportance, 
+  AndroidCategory, 
+  TriggerType, 
+  RepeatFrequency, 
+  TimestampTrigger,
+  AndroidNotificationVisibility
+} from '@notifee/react-native';
 import { Alarm } from '../store/useAppStore';
 import { DAYS } from '../constants/theme';
-
-// Configure notifications
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
 
 // ==================== PERMISSIONS ====================
 
@@ -21,100 +19,93 @@ export async function requestAlarmPermissions(): Promise<boolean> {
     return true;
   }
 
-  const { status: existingStatus } = await Notifications.getPermissionsAsync();
-  let finalStatus = existingStatus;
-
-  if (existingStatus !== 'granted') {
-    const { status } = await Notifications.requestPermissionsAsync();
-    finalStatus = status;
-  }
+  const settings = await notifee.requestPermission();
+  let finalStatus = settings.authorizationStatus >= 1;
 
   if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('alarms', {
+    await notifee.createChannel({
+      id: 'alarms',
       name: 'Alarms',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
+      importance: AndroidImportance.HIGH,
+      vibration: true,
+      vibrationPattern: [0, 500, 200, 500],
       lightColor: '#7C5CFC',
       sound: 'default',
-      enableVibrate: true,
       bypassDnd: true,
-      audioAttributes: {
-        usage: Notifications.AndroidAudioUsage.ALARM,
-        contentType: Notifications.AndroidAudioContentType.SONIFICATION,
-        flags: {
-          enforceAudibility: true,
-          requestHardwareAudioVideoSynchronization: true,
-        },
-      },
-      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
+      visibility: AndroidNotificationVisibility.PUBLIC,
     });
   }
 
-  return finalStatus === 'granted';
+  return finalStatus;
 }
 
 // ==================== SCHEDULE ALARM ====================
 
 export async function scheduleAlarm(alarm: Alarm): Promise<string[]> {
   const notificationIds: string[] = [];
-
   if (!alarm.isEnabled) return notificationIds;
 
   const [hours, minutes] = alarm.time.split(':').map(Number);
-
-  // Check if alarm repeats on specific days
   const hasRepeatDays = alarm.days.some(Boolean);
+  
+  const createTrigger = async (timestamp: number, id: string) => {
+    const trigger: TimestampTrigger = {
+      type: TriggerType.TIMESTAMP,
+      timestamp,
+      repeatFrequency: hasRepeatDays ? RepeatFrequency.WEEKLY : undefined,
+      alarmManager: { allowWhileIdle: true },
+    };
+
+    await notifee.createTriggerNotification({
+      id,
+      title: alarm.label || 'Suari Ka Alarm',
+      body: `Wake up! It's time for ${alarm.label || 'your alarm'}.`,
+      android: {
+        channelId: 'alarms',
+        category: AndroidCategory.ALARM,
+        flags: ['insistent'], // This forces the sound to LOOP continuously!
+        fullScreenAction: {
+          id: 'default',
+        },
+        pressAction: {
+          id: 'default',
+        },
+      },
+      data: { alarmId: alarm.id, type: 'alarm' },
+    }, trigger);
+  };
 
   if (hasRepeatDays) {
     // Schedule for each enabled day
     for (let i = 0; i < 7; i++) {
       if (alarm.days[i]) {
-        const id = await Notifications.scheduleNotificationAsync({
-          content: {
-            title: alarm.label || 'Suari Ka Alarm',
-            body: `Good morning! ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`,
-            sound: true,
-            vibrate: alarm.vibrate ? [0, 500, 200, 500] : undefined,
-            priority: Notifications.AndroidNotificationPriority.MAX,
-            categoryIdentifier: 'alarm',
-            data: { alarmId: alarm.id, type: 'alarm' },
-          },
-          trigger: {
-            weekday: i + 1, // 1=Sunday, 2=Monday, etc.
-            hour: hours,
-            minute: minutes,
-            second: 0,
-            repeats: true,
-          } as any,
-        });
-        notificationIds.push(id);
+        const notifId = `${alarm.id}-${i}`;
+        const now = new Date();
+        let target = new Date(now);
+        target.setHours(hours, minutes, 0, 0);
+        
+        let dayOffset = (i - target.getDay() + 7) % 7;
+        if (dayOffset === 0 && target.getTime() <= now.getTime()) {
+          dayOffset = 7;
+        }
+        target.setDate(target.getDate() + dayOffset);
+        
+        await createTrigger(target.getTime(), notifId);
+        notificationIds.push(notifId);
       }
     }
   } else {
-    // One-time alarm - next occurrence
+    // One-time alarm
+    const notifId = `${alarm.id}-once`;
     const now = new Date();
     const alarmTime = new Date();
     alarmTime.setHours(hours, minutes, 0, 0);
 
-    if (alarmTime <= now) {
+    if (alarmTime.getTime() <= now.getTime()) {
       alarmTime.setDate(alarmTime.getDate() + 1);
     }
-
-    const id = await Notifications.scheduleNotificationAsync({
-      content: {
-        title: alarm.label || 'Suari Ka Alarm',
-        body: `Wake up! ${alarm.label || 'Alarm is ringing!'}`,
-        sound: true,
-        vibrate: alarm.vibrate ? [0, 500, 200, 500] : undefined,
-        priority: Notifications.AndroidNotificationPriority.MAX,
-        categoryIdentifier: 'alarm',
-        data: { alarmId: alarm.id, type: 'alarm' },
-      },
-      trigger: {
-        date: alarmTime,
-      },
-    });
-    notificationIds.push(id);
+    await createTrigger(alarmTime.getTime(), notifId);
+    notificationIds.push(notifId);
   }
 
   return notificationIds;
@@ -124,9 +115,7 @@ export async function scheduleAlarm(alarm: Alarm): Promise<string[]> {
 
 export async function cancelAlarm(notificationIds?: string[]): Promise<void> {
   if (notificationIds && notificationIds.length > 0) {
-    for (const id of notificationIds) {
-      await Notifications.cancelScheduledNotificationAsync(id);
-    }
+    await notifee.cancelTriggerNotifications(notificationIds);
   }
 }
 
@@ -135,39 +124,37 @@ export async function cancelAlarm(notificationIds?: string[]): Promise<void> {
 export async function snoozeAlarm(alarm: Alarm, snoozeDuration: number = 5): Promise<string> {
   const snoozeTime = new Date();
   snoozeTime.setMinutes(snoozeTime.getMinutes() + snoozeDuration);
+  const id = `${alarm.id}-snooze-${Date.now()}`;
 
-  const id = await Notifications.scheduleNotificationAsync({
-    content: {
-      title: '😴 Snooze - ' + (alarm.label || 'Alarm'),
-      body: `${snoozeDuration} minute baad phir bajega!`,
-      sound: true,
-      vibrate: [0, 500, 200, 500],
-      priority: Notifications.AndroidNotificationPriority.MAX,
-      data: { alarmId: alarm.id, type: 'snooze' },
+  const trigger: TimestampTrigger = {
+    type: TriggerType.TIMESTAMP,
+    timestamp: snoozeTime.getTime(),
+    alarmManager: { allowWhileIdle: true },
+  };
+
+  await notifee.createTriggerNotification({
+    id,
+    title: '😴 Snooze - ' + (alarm.label || 'Alarm'),
+    body: `Ringing again in ${snoozeDuration} minutes.`,
+    android: {
+      channelId: 'alarms',
+      category: AndroidCategory.ALARM,
+      flags: ['insistent'],
+      fullScreenAction: { id: 'default' },
+      pressAction: { id: 'default' },
     },
-    trigger: {
-      date: snoozeTime,
-    },
-  });
+    data: { alarmId: alarm.id, type: 'snooze' },
+  }, trigger);
 
   return id;
 }
 
 // ==================== SETUP ALARM ACTIONS ====================
-
+// Notifee registers actions directly in the notification or via setNotificationCategories.
+// We can define custom categories if needed, but pressActions cover most use cases.
 export async function setupAlarmActions(): Promise<void> {
-  await Notifications.setNotificationCategoryAsync('alarm', [
-    {
-      identifier: 'snooze',
-      buttonTitle: '5 min Snooze',
-      options: { opensAppToForeground: false },
-    },
-    {
-      identifier: 'dismiss',
-      buttonTitle: 'Dismiss',
-      options: { opensAppToForeground: false, isDestructive: true },
-    },
-  ]);
+  // Can be left empty for Notifee as actions are set per-notification, 
+  // or setup background action handlers.
 }
 
 // ==================== HELPERS ====================
@@ -188,7 +175,6 @@ export function getNextAlarmTime(alarm: Alarm): string {
     return formatTimeDiff(diffMs);
   }
 
-  // Find next enabled day
   const currentDay = now.getDay();
   for (let offset = 0; offset < 7; offset++) {
     const checkDay = (currentDay + offset) % 7;

@@ -7,8 +7,15 @@ import { useAppStore } from '../store/useAppStore';
 import { requestAlarmPermissions, setupAlarmActions } from '../services/alarmService';
 import { supabase } from '../lib/supabase';
 import { Session } from '@supabase/supabase-js';
+import notifee, { EventType } from '@notifee/react-native';
 
 SplashScreen.preventAutoHideAsync();
+
+notifee.onBackgroundEvent(async ({ type, detail }) => {
+  if (type === EventType.ACTION_PRESS && detail.pressAction?.id) {
+    console.log('User pressed an action with the id: ', detail.pressAction.id);
+  }
+});
 
 export default function RootLayout() {
   const { hydrate } = useAppStore();

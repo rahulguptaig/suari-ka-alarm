@@ -32,7 +32,9 @@
         "android.permission.USE_EXACT_ALARM",
         "android.permission.WAKE_LOCK",
         "android.permission.INTERNET",
-        "android.permission.ACCESS_NETWORK_STATE"
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.USE_FULL_SCREEN_INTENT",
+        "android.permission.SYSTEM_ALERT_WINDOW"
       ],
       "usesCleartextTraffic": true
     },
@@ -43,6 +45,7 @@
     },
     "plugins": [
       "expo-router",
+      "@notifee/react-native",
       [
         "expo-notifications",
         {
